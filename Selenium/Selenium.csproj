@@ -9,11 +9,74 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.5" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.4.0" />
+    <PackageReference Include="Selenium.Support" Version="4.4.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="105.0.5195.5200" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.27.0" />
+    <PackageReference Include="Selenium.WebDriver.IEDriver" Version="4.3.0" />
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Helper\" />
+    <None Remove="Tests\" />
+    <None Remove="Tests\PageObjects\" />
+    <None Remove="Tests\PageSteps\" />
+    <None Remove="Tests\TestScripts\" />
+    <None Remove="Utilities\" />
+    <None Remove="Utilities\Screenshots\" />
+    <None Remove="Utilities\Reports\" />
+    <None Remove="Tests\TestScripts\Desktop\" />
+    <None Remove="Tests\TestScripts\Mobile\" />
+    <None Remove="Microsoft.NETCore.Platforms" />
+    <None Remove="Selenium.WebDriver" />
+    <None Remove="Selenium.Support" />
+    <None Remove="Selenium.WebDriver.ChromeDriver" />
+    <None Remove="Selenium.Firefox.WebDriver" />
+    <None Remove="Selenium.WebDriver.IEDriver" />
+    <None Remove="Config\" />
+    <None Remove="..\.editorconfig" />
+    <None Remove="Data\" />
+    <None Remove="Data\TestData\" />
+    <None Remove="Tests\PageSteps\Desktop\" />
+    <None Remove="Tests\PageSteps\Mobile\" />
+    <None Remove="Tests\PageObjects\Desktop\" />
+    <None Remove="Tests\PageObjects\Mobile\" />
+    <None Remove="ExcelDataReader" />
+    <None Remove="ExcelDataReader.DataSet" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Tests\" />
+    <Folder Include="Tests\PageObjects\" />
+    <Folder Include="Tests\PageSteps\" />
+    <Folder Include="Tests\TestScripts\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Utilities\Screenshots\" />
+    <Folder Include="Utilities\Reports\" />
+    <Folder Include="Tests\TestScripts\Desktop\" />
+    <Folder Include="Tests\TestScripts\Mobile\" />
+    <Folder Include="Config\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\TestData\" />
+    <Folder Include="Tests\PageSteps\Desktop\" />
+    <Folder Include="Tests\PageSteps\Mobile\" />
+    <Folder Include="Tests\PageObjects\Desktop\" />
+    <Folder Include="Tests\PageObjects\Mobile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Data\TestData\TestData.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\TestData\TestData.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
