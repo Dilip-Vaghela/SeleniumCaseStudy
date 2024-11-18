@@ -15,7 +15,7 @@
             {
 
                 case "Safari-Latest":
-                    SafariOptions capabilitySafari = new SafariOptions();
+                    var capabilitySafari = new SafariOptions();
                     capabilitySafari.AddAdditionalOption("os", "OS X");
                     capabilitySafari.AddAdditionalOption("os_version", "Big Sur");
                     capabilitySafari.AddAdditionalOption("browser", "Safari");
