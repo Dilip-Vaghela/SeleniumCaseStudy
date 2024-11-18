@@ -13,22 +13,22 @@ namespace Selenium.Tests.TestScripts.Desktop
  
         [Test,TestCaseSource(typeof(ConfigDataAccess), nameof(ConfigDataAccess.ReadDataProduct))]
         public void Check_ProductDetailsAndClickContinueButton(
-            string ID, string Title, string Price, string InterestRate, string Description )
+            string id, string title, string price, string interestRate, string description )
         {
-            SeleniumHelper Browser = new SeleniumHelper(webDriver);
-            ProductPageSteps ProductPageSteps = new ProductPageSteps(webDriver);
+            SeleniumHelper browser = new SeleniumHelper(WebDriver);
+            ProductPageSteps productPageSteps = new ProductPageSteps(WebDriver);
 
-            Browser.Goto("https://podium-test-65804.firebaseapp.com/");
+            browser.Goto("https://podium-test-65804.firebaseapp.com/");
             // check product title is correct
-            ProductPageSteps.CheckProductTitleIsCorrect(ID, Title);
+            productPageSteps.CheckProductTitleIsCorrect(id, title);
             // check product price is correct
-            ProductPageSteps.CheckProductPriceIsCorrect(ID, Price);
+            productPageSteps.CheckProductPriceIsCorrect(id, price);
             // check product interest rate is correct
-            ProductPageSteps.CheckProductInterestRateIsCorrect(ID, InterestRate);
+            productPageSteps.CheckProductInterestRateIsCorrect(id, interestRate);
             // check product description is correct
-            ProductPageSteps.CheckProductDescriptionIsCorrect(ID, Description);
+            productPageSteps.CheckProductDescriptionIsCorrect(id, description);
             // click on continue button
-            ProductPageSteps.ClickProductContinueBtn(ID);
+            productPageSteps.ClickProductContinueBtn(id);
         }
     }
 }

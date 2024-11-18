@@ -4,15 +4,15 @@ namespace Selenium.Helper
 {
     public class SeleniumHelper
     {
-        private IWebDriver webDriver;
-        public SeleniumHelper(IWebDriver driver) { webDriver = driver; }
+        private readonly IWebDriver _webDriver;
+        public SeleniumHelper(IWebDriver driver) { _webDriver = driver; }
         private static bool IsNotNull([NotNullWhen(true)] object? obj) => obj != null;
 
         public void Quit()
         {
             CheckTestCaseResult();
             CheckTestCaseResultForBrowserStack();
-            webDriver.Quit();
+            _webDriver.Quit();
         }
 
         public void CheckTestCaseResult()
@@ -23,7 +23,7 @@ namespace Selenium.Helper
         public string GetAttribute(By element, string attributeName)
         {
             WaitForReady(element);
-            return webDriver.FindElement(element).GetAttribute(attributeName);
+            return _webDriver.FindElement(element).GetAttribute(attributeName);
         }
 
 
@@ -35,8 +35,8 @@ namespace Selenium.Helper
             if (IsNotNull(screenshotLocation))
             {
                 string? pngLocation = Path.Combine(screenshotLocation, "Utilities/Screenshots/" + fileName + presentDate + ".png");
-                Screenshot screenshot = ((ITakesScreenshot)webDriver).GetScreenshot();
-                screenshot.SaveAsFile(pngLocation, ScreenshotImageFormat.Png);
+                Screenshot screenshot = ((ITakesScreenshot)_webDriver).GetScreenshot();
+                screenshot.SaveAsFile(pngLocation);
                 TestContext.AddTestAttachment(pngLocation, "Screenshot");
             }
         }
@@ -50,33 +50,33 @@ namespace Selenium.Helper
             {
                     if (TestContext.CurrentContext.Result.Outcome.Status.Equals(TestStatus.Failed))
                     {
-                        ((IJavaScriptExecutor)webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"" + TestContext.CurrentContext.Result.Message.ToString() + "\"}}");
-                        ((IJavaScriptExecutor)webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + strPresentDateTime + " " + TestContext.CurrentContext.Test.MethodName.ToString() + "\"}}");
+                        ((IJavaScriptExecutor)_webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"" + TestContext.CurrentContext.Result.Message.ToString() + "\"}}");
+                        ((IJavaScriptExecutor)_webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + strPresentDateTime + " " + TestContext.CurrentContext.Test.MethodName?.ToString() + "\"}}");
                     }
                     else
                     {
-                        ((IJavaScriptExecutor)webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"PASSED WITHOUT ERRORS\"}}");
-                        ((IJavaScriptExecutor)webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + strPresentDateTime + " " + TestContext.CurrentContext.Test.MethodName.ToString() + "\"}}");
+                        ((IJavaScriptExecutor)_webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"PASSED WITHOUT ERRORS\"}}");
+                        ((IJavaScriptExecutor)_webDriver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionName\", \"arguments\": {\"name\":\"" + strPresentDateTime + " " + TestContext.CurrentContext.Test.MethodName?.ToString() + "\"}}");
                     }
 
             }
         }
-        public IWebDriver GetDriver { get { return webDriver; } }
+        public IWebDriver? GetDriver { get { return _webDriver; } }
         public void Goto(string url)
         {
-            webDriver.Url = url;
+            _webDriver.Url = url;
         }
         public void SwitchToOverlay(int iFrameNumber)
         {
-            webDriver.SwitchTo().Frame(iFrameNumber);
+            _webDriver.SwitchTo().Frame(iFrameNumber);
         }
 
         public void SwitchToFrame(By frameElement1)
         {
             try
             {
-                IWebElement frameElement = webDriver.FindElement(frameElement1);
-                webDriver.SwitchTo().Frame(frameElement);
+                IWebElement frameElement = _webDriver.FindElement(frameElement1);
+                _webDriver.SwitchTo().Frame(frameElement);
                 Console.WriteLine("Navigated to frame with element " + frameElement);
             }
             catch (NoSuchFrameException e)
@@ -95,25 +95,25 @@ namespace Selenium.Helper
 
         public void SwitchToOverlay(By element)
         {
-            webDriver.SwitchTo().Frame(1);
+            _webDriver.SwitchTo().Frame(1);
         }
-        public void SwitchToDefaultIFrame() { webDriver.SwitchTo().DefaultContent(); }
+        public void SwitchToDefaultIFrame() { _webDriver.SwitchTo().DefaultContent(); }
         public void HoverOnElement(By element)
         {
-            IWebElement ele = webDriver.FindElement(element);
+            IWebElement ele = _webDriver.FindElement(element);
             try
             {
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
                 Wait(2);
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("window.scrollBy(0,100);");
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("window.scrollBy(0,100);");
                 Wait(2);
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
                 Wait(2);
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("window.scrollBy(0,100);");
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("window.scrollBy(0,100);");
                 Wait(2);
             }
             catch (Exception)
@@ -124,15 +124,15 @@ namespace Selenium.Helper
 
         public void HoverOnElementWithoutScrollBy(By element)
         {
-            IWebElement ele = webDriver.FindElement(element);
+            IWebElement ele = _webDriver.FindElement(element);
             try
             {
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                ((IJavaScriptExecutor)webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
+                ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(false);", ele);
             }
             catch (Exception)
             { 
@@ -149,7 +149,7 @@ namespace Selenium.Helper
             Wait(5);
             try
             {
-                webDriver.FindElement(element).Click();
+                _webDriver.FindElement(element).Click();
             }
             catch (Exception)
             {
@@ -163,12 +163,12 @@ namespace Selenium.Helper
             HoverOnElement(element);
             try
             {
-                webDriver.FindElement(element).Click();
+                _webDriver.FindElement(element).Click();
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                webDriver.FindElement(element).Click();
+                _webDriver.FindElement(element).Click();
             }
             catch (Exception)
             {
@@ -181,12 +181,12 @@ namespace Selenium.Helper
             HoverOnElement(element);
             try
             {
-                webDriver.FindElement(element).SendKeys(Keys.Return);
+                _webDriver.FindElement(element).SendKeys(Keys.Return);
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                webDriver.FindElement(element).SendKeys(Keys.Return);
+                _webDriver.FindElement(element).SendKeys(Keys.Return);
             }
             catch (Exception)
             {
@@ -200,12 +200,12 @@ namespace Selenium.Helper
             HoverOnElement(element);
             try
             {
-                webDriver.FindElement(element).SendKeys(Keys.Tab);
+                _webDriver.FindElement(element).SendKeys(Keys.Tab);
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                webDriver.FindElement(element).SendKeys(Keys.Tab);
+                _webDriver.FindElement(element).SendKeys(Keys.Tab);
             }
             catch (Exception)
             {
@@ -218,12 +218,12 @@ namespace Selenium.Helper
             HoverOnElement(element);
             try
             {
-                webDriver.FindElement(element).SendKeys(keys);
+                _webDriver.FindElement(element).SendKeys(keys);
             }
             catch (StaleElementReferenceException)
             {
                 Wait(2);
-                webDriver.FindElement(element).SendKeys(keys);
+                _webDriver.FindElement(element).SendKeys(keys);
             }
             catch (Exception)
             {
@@ -234,7 +234,7 @@ namespace Selenium.Helper
         {
             try
             {
-                webDriver.FindElement(element).Clear();
+                _webDriver.FindElement(element).Clear();
             }
             catch (Exception)
             {   
@@ -245,7 +245,7 @@ namespace Selenium.Helper
         {
             WaitForReady(element);
             HoverOnElement(element);
-            SelectElement selectElement = new SelectElement(webDriver.FindElement(element));
+            SelectElement selectElement = new SelectElement(_webDriver.FindElement(element));
             try
             {
                 selectElement.SelectByText(option);
@@ -265,7 +265,7 @@ namespace Selenium.Helper
         {
             WaitForReady(element);
             HoverOnElement(element);
-            SelectElement selectElement = new SelectElement(webDriver.FindElement(element));
+            SelectElement selectElement = new SelectElement(_webDriver.FindElement(element));
             try
             {
                 selectElement.SelectByValue(value);
@@ -286,7 +286,7 @@ namespace Selenium.Helper
             {
                 //int interval = 1;
                 var now = DateTime.Now;
-                WebDriverWait wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(delay));
+                WebDriverWait wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(delay));
                 //{ PollingInterval = TimeSpan.FromMilliseconds(interval) };
                 bool duration = wait.Until(wd => (DateTime.Now - now) - TimeSpan.FromSeconds(delay) > TimeSpan.Zero);
             }
@@ -299,7 +299,7 @@ namespace Selenium.Helper
         {
             FluentWaitForElementTobeDisplayed(element);
             FluentWaitForElementTobeEnabled(element);
-            WaitUntilJSReady();
+            WaitUntilJsReady();
             WaitUntilJQueryReady();
             Wait(2);
         }
@@ -307,7 +307,7 @@ namespace Selenium.Helper
         public void FluentWaitForElementTobeDisplayed(By element)
         {
             int delay = 3;
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(webDriver);
+            DefaultWait<IWebDriver?> fluentWait = new DefaultWait<IWebDriver?>(_webDriver);
             fluentWait.Timeout = TimeSpan.FromMinutes(delay);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(250);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
@@ -316,7 +316,7 @@ namespace Selenium.Helper
             {
                 fluentWait.Until(driver =>
                 {
-                    IWebElement tempElement = webDriver.FindElement(element);
+                    IWebElement tempElement = _webDriver.FindElement(element);
                     return tempElement.Displayed;
                 }
                 );
@@ -330,7 +330,7 @@ namespace Selenium.Helper
         public void FluentWaitForElementTobeEnabled(By element)
         {
             int delay = 3;
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(webDriver);
+            DefaultWait<IWebDriver?> fluentWait = new DefaultWait<IWebDriver?>(_webDriver);
             fluentWait.Timeout = TimeSpan.FromMinutes(delay);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(250);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
@@ -339,7 +339,7 @@ namespace Selenium.Helper
             {
                 fluentWait.Until(driver =>
                 {
-                    IWebElement tempElement = webDriver.FindElement(element);
+                    IWebElement tempElement = _webDriver.FindElement(element);
                     return tempElement.Enabled;
                 }
                 );
@@ -349,10 +349,10 @@ namespace Selenium.Helper
                 Assert.Fail($"Failed to wait for [{element}] to be enabled for [{delay}] mintues]");
             }
         }
-        public void WaitUntilJSReady()
+        public void WaitUntilJsReady()
         {
             int delay = 3;
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(webDriver);
+            DefaultWait<IWebDriver?> fluentWait = new DefaultWait<IWebDriver?>(_webDriver);
             fluentWait.Timeout = TimeSpan.FromMinutes(delay);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(250);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
@@ -362,7 +362,7 @@ namespace Selenium.Helper
             {
             try
                 { 
-                    bool jsReady = (bool)((IJavaScriptExecutor)webDriver).ExecuteScript("return document.readyState").ToString().Equals("complete");
+                    bool jsReady = (bool)((IJavaScriptExecutor)_webDriver).ExecuteScript("return document.readyState").ToString().Equals("complete");
                     if (jsReady)
                     {
                         return true;
@@ -377,7 +377,7 @@ namespace Selenium.Helper
         }
         public void WaitUntilJQueryReady()
         {
-            bool jqueryDefined = (bool)((IJavaScriptExecutor)webDriver).ExecuteScript("return typeof jQuery != 'undefined'");
+            bool jqueryDefined = (bool)((IJavaScriptExecutor)_webDriver).ExecuteScript("return typeof jQuery != 'undefined'");
             if (jqueryDefined)
             {
                 WaitUntilJQueryLoad();
@@ -387,7 +387,7 @@ namespace Selenium.Helper
         public void WaitUntilJQueryLoad()
         {
             int delay = 3;
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(webDriver);
+            DefaultWait<IWebDriver?> fluentWait = new DefaultWait<IWebDriver?>(_webDriver);
             fluentWait.Timeout = TimeSpan.FromMinutes(delay);
             fluentWait.PollingInterval = TimeSpan.FromMilliseconds(250);
             fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
@@ -397,7 +397,7 @@ namespace Selenium.Helper
             {
                 try
                 {
-                    bool jqueryReady = (bool)((IJavaScriptExecutor)webDriver).ExecuteScript("return jQuery.active == 0");
+                    bool jqueryReady = (bool)((IJavaScriptExecutor)_webDriver).ExecuteScript("return jQuery.active == 0");
                     if (jqueryReady)
                     {
                         return true;

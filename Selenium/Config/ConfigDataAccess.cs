@@ -7,7 +7,7 @@ namespace Selenium.Config
     {
         public static IEnumerable<TestCaseData> ReadDataProduct() { return ReadDataFromExcel("ProductPage"); }
 
-        private static IEnumerable<TestCaseData>ReadDataFromExcel(string SheetName)
+        private static IEnumerable<TestCaseData>ReadDataFromExcel(string sheetName)
         {
             string? executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string filePath = Path.Combine(executableLocation + "/Data/TestData/TestData.xlsx");
@@ -21,7 +21,7 @@ namespace Selenium.Config
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     if (reader == null)
-                        throw new Exception(string.Format("No data return from file, file name:{0}", filePath));
+                        throw new Exception($"No data return from file, file name:{filePath}");
 
 
                     DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
@@ -49,6 +49,7 @@ namespace Selenium.Config
                     }
 
                 }
+                testCases.RemoveAt(0);
             }
             if (testCases != null)
                 foreach (TestCaseData testCaseData in testCases)

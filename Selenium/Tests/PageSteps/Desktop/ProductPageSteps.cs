@@ -6,46 +6,49 @@ namespace Selenium.Tests.PageSteps.Desktop
 {
     public class ProductPageSteps: ProductPageObjects
     {
-        private SeleniumHelper Brower;
-        public ProductPageSteps(IWebDriver webDriver) { Brower = new SeleniumHelper(webDriver); }
+        private readonly SeleniumHelper _brower;
+        public ProductPageSteps(IWebDriver webDriver) { _brower = new SeleniumHelper(webDriver); }
 
         
-        public void CheckProductTitleIsCorrect(string productID,string expected)
+        public void CheckProductTitleIsCorrect(string productId,string expected)
         {
-            By msgProductTitle = By.XPath(string.Format(msgProductTitleByID, productID));
-            string actual = Brower.GetAttribute(msgProductTitle, "innerHTML");
-            Assert.That(actual, Is.EqualTo(expected),string.Format("The acutal value {0} does not the match the expected {1}",actual,expected));
+            By msgProductTitle = By.XPath(string.Format(MsgProductTitleById, productId));
+            string actual = _brower.GetAttribute(msgProductTitle, "innerHTML");
+            Assert.That(actual, Is.EqualTo(expected),
+                $"The acutal value {actual} does not the match the expected {expected}");
         }
 
-        public void CheckProductPriceIsCorrect(string productID, string expected)
+        public void CheckProductPriceIsCorrect(string productId, string expected)
         {
-            By msgProductPrice = By.XPath(string.Format(msgProductPriceByID, productID));
-            string actual = Brower.GetAttribute(msgProductPrice, "innerHTML");
+            By msgProductPrice = By.XPath(string.Format(MsgProductPriceById, productId));
+            string actual = _brower.GetAttribute(msgProductPrice, "innerHTML");
             string expectedFormatted = string.Format("£" + expected);
-            Assert.That(actual, Is.EqualTo(expectedFormatted), string.Format("The acutal value {0} does not the match the expected {1}", actual, expectedFormatted));
+            Assert.That(actual, Is.EqualTo(expectedFormatted),
+                $"The acutal value {actual} does not the match the expected {expectedFormatted}");
         }
 
-        public void CheckProductInterestRateIsCorrect(string productID, string expected)
+        public void CheckProductInterestRateIsCorrect(string productId, string expected)
         {
-            By msgProductInterestRate = By.XPath(string.Format(msgProductInterestRateByID, productID));
-            string actual = Brower.GetAttribute(msgProductInterestRate, "innerHTML");
-            double ExpectedNum = Convert.ToDouble(expected) * 100;
-            string expectedFormatted = string.Format(ExpectedNum.ToString() + "%");
-            Assert.That(actual, Is.EqualTo(expectedFormatted), string.Format("The acutal value {0} does not the match the expected {1}", actual, expectedFormatted));
+            By msgProductInterestRate = By.XPath(string.Format(MsgProductInterestRateById, productId));
+            string actual = _brower.GetAttribute(msgProductInterestRate, "innerHTML");
+            double expectedNum = Convert.ToDouble(expected) * 100;
+            string expectedFormatted = string.Format(expectedNum.ToString() + "%");
+            Assert.That(actual, Is.EqualTo(expectedFormatted),
+                $"The acutal value {actual} does not the match the expected {expectedFormatted}");
         }
 
-        public void CheckProductDescriptionIsCorrect(string productID, string expected)
+        public void CheckProductDescriptionIsCorrect(string productId, string expected)
         {
-            By msgProductDescription = By.XPath(string.Format(msgProductDescriptionByID, productID));
-            string actual = Brower.GetAttribute(msgProductDescription, "innerHTML");
+            By msgProductDescription = By.XPath(string.Format(MsgProductDescriptionById, productId));
+            string actual = _brower.GetAttribute(msgProductDescription, "innerHTML");
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        public void ClickProductContinueBtn(string productID)
+        public void ClickProductContinueBtn(string productId)
         {
-            By btnProductContine = By.XPath(string.Format(btnProductContineByID, productID));
+            By btnProductContine = By.XPath(string.Format(BtnProductContineById, productId));
 
-            Brower.ClickElement(btnProductContine);
+            _brower.ClickElement(btnProductContine);
         }
 
     }

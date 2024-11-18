@@ -26,28 +26,28 @@ namespace Selenium.Tests.TestScripts.Desktop;
 [Parallelizable(ParallelScope.All)]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class TestBaseDesktop
-{ 
-    private string profile = string.Empty;
-    private string browser = string.Empty;
-    public IWebDriver? webDriver;
+{
+    private readonly string _profile;
+    private readonly string _browser;
+    protected IWebDriver WebDriver;
 
 
     public TestBaseDesktop(string profile, string browser)
     {
-        this.profile = profile;
-        this.browser = browser;
+        this._profile = profile;
+        this._browser = browser;
     }
 
     [SetUp]
     public void Setup()
     { 
-            webDriver = new DriverHelpers().CreateDriver(profile, browser);
-            webDriver.Manage().Window.Maximize();
+            WebDriver = new DriverHelpers().CreateDriver(_profile, _browser);
+            WebDriver.Manage().Window.Maximize();
     }
 
     [TearDown]
     public void TearDown()
     {
-            new SeleniumHelper(webDriver).Quit();   
+            new SeleniumHelper(WebDriver).Quit();   
     } 
 }
