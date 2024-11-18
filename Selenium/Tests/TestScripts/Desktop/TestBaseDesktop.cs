@@ -41,7 +41,7 @@ public class TestBaseDesktop
     [SetUp]
     public void Setup()
     { 
-            WebDriver = new DriverHelpers().CreateDriver(_profile, _browser);
+            WebDriver = new DriverHelpers().CreateDriver(_profile, _browser) ?? throw new InvalidOperationException();
             WebDriver.Manage().Window.Maximize();
     }
 

@@ -44,7 +44,7 @@ namespace Selenium.Config
                         var row = new List<string>();
                         var columnCount = reader.FieldCount;
                         for (var i = 0; i < columnCount; i++)
-                            row.Add(reader.GetValue(i).ToString());
+                            row.Add(reader.GetValue(i).ToString() ?? throw new InvalidOperationException());
                         testCases.Add(new TestCaseData(row.ToArray()));
                     }
 

@@ -360,9 +360,9 @@ namespace Selenium.Helper
 
             fluentWait.Until(driver =>
             {
-            try
-                { 
-                    bool jsReady = (bool)((IJavaScriptExecutor)_webDriver).ExecuteScript("return document.readyState").ToString().Equals("complete");
+                bool jsReady = (bool)((IJavaScriptExecutor)_webDriver).ExecuteScript("return document.readyState");
+                try
+                {
                     if (jsReady)
                     {
                         return true;
